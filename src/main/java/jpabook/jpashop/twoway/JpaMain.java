@@ -1,11 +1,7 @@
-package jpabook.jpashop.objectcenter;
+package jpabook.jpashop.twoway;
 
-import jpabook.jpashop.twoway.Team;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -29,23 +25,33 @@ public class JpaMain {
             // (2) Member 엔티티 저장
             Member member = new Member();
             member.setUsername("memberA");
-            member.setTeam(team);  // memberA의 팀을 TeamA로 설정
+            member.setTeam(team);  // 팀에 매핑
             em.persist(member);  // memberA 저장
+
+            // (3) 반대편에서도 관계 설정
+            team.getMembers().add(member); // Team 엔티티의 members 리스트에 member 추가
+            //위 코드를 날리고
+            //team에서 이걸 넣어주는 방법도 있다.
+//            public void setTeam(Team team) {
+//
+//                this.team = team;
+//                //양방향을 위한 메소드
+//                team.getMembers().add(this);
+//            }
+            em.flush(); // 즉시 DB에 반영
+            em.clear(); // 영속성 컨텍스트 초기화
 
             // 5. 조회 작업
             // (1) memberA를 DB에서 조회
             Member findMember = em.find(Member.class, member.getId());
 
-            // 6. 수정 작업
-            // (2) TeamA가 아닌 새로운 Team을 찾아서 memberA에 설정
-            Team newTeam = em.find(Team.class, 100L);  // 예시로 ID 100인 Team 조회
-            findMember.setTeam(newTeam);  // memberA의 팀을 새로운 Team으로 변경
+            // (2) Team의 members 리스트에서 모든 Member 출력
+            List<Member> members = findMember.getTeam().getMembers();
+            for (Member m : members) {
+                System.out.println(m.getUsername()); // memberA 출력
+            }
 
-            // 7. 결과 출력
-            Team findTeam = findMember.getTeam();
-            System.out.println("findTeam = " + findTeam.getName());  // 새로운 팀 이름 출력
-
-            // 8. 커밋: 트랜잭션을 성공적으로 완료
+            // 트랜잭션 커밋
             tx.commit();
         } catch (Exception e) {
             // 예외 발생 시 트랜잭션 롤백

@@ -1,4 +1,6 @@
-package jpabook.jpashop.tablecenter;
+package jpabook.jpashop.twoway;
+
+import jpabook.jpashop.twoway.Team;
 
 import javax.persistence.*;
 
@@ -13,8 +15,13 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-    @Column(name = "TEAM_ID")
-    private Long teamId;
+
+    //객체 매핑 순서
+    //1. 관계가 뭔지
+    @ManyToOne
+    //2. 조인 컬럼
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     public Long getId() {
         return id;
@@ -32,11 +39,12 @@ public class Member {
         this.username = username;
     }
 
-    public Long getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team team) {
+
+        this.team = team;
     }
 }

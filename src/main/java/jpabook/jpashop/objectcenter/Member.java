@@ -1,5 +1,7 @@
 package jpabook.jpashop.objectcenter;
 
+import jpabook.jpashop.twoway.Team;
+
 import javax.persistence.*;
 
 @Entity

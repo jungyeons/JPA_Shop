@@ -1,4 +1,4 @@
-//package jpabook.jpashop.tablecenter;
-//
-//public class RoleType {
-//}
+package jpabook.jpashop.tablecenter;
+
+public class RoleType {
+}
