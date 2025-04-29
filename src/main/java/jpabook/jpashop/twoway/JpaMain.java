@@ -26,13 +26,20 @@ public class JpaMain {
             Member member = new Member();
             member.setUsername("memberA");
             member.setTeam(team);  // 팀에 매핑
+            //위 코드를 날리고
+            //Team에서 이걸 넣어주는 방법도 있다.
+//
+//            public void addMember(Member member) {
+//                member.setTeam(this);
+//                members.add(member);
+//            }
             em.persist(member);  // memberA 저장
 
             // (3) 반대편에서도 관계 설정
             team.getMembers().add(member); // Team 엔티티의 members 리스트에 member 추가
             //위 코드를 날리고
-            //team에서 이걸 넣어주는 방법도 있다.
-//            public void setTeam(Team team) {
+            //MEMBER에서 이걸 넣어주는 방법도 있다.
+//            public void changeTeam(Team team) {
 //
 //                this.team = team;
 //                //양방향을 위한 메소드
